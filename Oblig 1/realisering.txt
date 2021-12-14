@@ -1,0 +1,29 @@
+# Relasjoner
+
+Bok(ISBN, tittel, utgivelsesår, forlag)
+- KN: {ISBN}
+- PN: {ISBN}
+Forfatter(FID, fornavn, etternavn, fødselsdato)
+- KN: {FID}
+- PN: {FID}
+Forlag(navn, FID)
+- KN: {navn}
+- PN: {navn}
+Kapittel(nummer, ISBN, tittel, første, siste)
+- KN: {nummer, ISBN}
+- PN: {nummer, ISBN}
+Skrevet(ISBN, FID)
+- KN: {ISBN, FID}
+- PN: {ISBN, FID}
+Sjanger(ISBN, navn)
+- KN: {ISBN, navn}
+- PN: {ISBN, navn}
+
+# Fremmednøkler
+
+Kapittel(ISBN) -> Bok(ISBN)
+Forlag(FID) -> Forfatter(FID)
+Bok(forlag) -> Forlag(navn)
+Skrevet(ISBN) -> Bok(ISBN)
+Skrevet(FID) -> Forfatter(FID)
+Sjanger(ISBN) -> Bok(ISBN)

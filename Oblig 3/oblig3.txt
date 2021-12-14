@@ -1,0 +1,88 @@
+CREATE TABLE Tog (
+	togNr INT PRIMARY KEY,
+	startStasjon TEXT NOT NULL,
+	endeStasjon TEXT NOT NULL,
+	ankomstTid TIME NOT NULL
+);
+
+CREATE TABLE TogTabell (
+	togNr INT REFERENCES Tog(togNr),
+	stasjon TEXT UNIQUE NOT NULL,
+	avgangsTid TIME NOT NULL,
+	PRIMARY KEY (togNr, avgangsTid)
+);
+
+CREATE TABLE Plass (
+	togNr INT REFERENCES Tog(togNr),
+	vognNr INT NOT NULL,
+	plassNr INT NOT NULL,
+	dato DATE NOT NULL,
+	vindu BOOLEAN NOT NULL,
+	ledig BOOLEAN NOT NULL,
+	UNIQUE (togNr, dato),
+	PRIMARY KEY (togNr, vognNr, plassNr, dato)
+);
+
+Antagelser gjort:
+* Jeg har satt at ingen attributter kan være NULL. Dette fordi jeg ikke ser tilfeller der man ønsker å opprette for eksempel et tog som ikke har en start og endestasjon (ikke er i drift)
+* Jeg har valgt datatypen Text på flere områder da vi ikke vet hvor lang strengen skal være og jeg ikke ser noen hensikt med å sette en maksgrense på dem.
+* Jeg spesifiserer i Plass at kombinasjonen togNr og dato må sammen være unike i tabellen. Dette gjør jeg fordi oppgaven nevner at "Hver togrute går maks én gang i døgnet".
+* Jeg har valgt å sette time uten tidssone fordi jeg antar at denne databasen kun skal brukes for eksempel i Norge, hvor man har samme tidssone overalt.
+* Alle primary keys er unike og jeg trenger dermed for eksempel ikke å spesifisere at togNr og avgangstid skal være unike sånn at ett tog ikke kan få duplikate avgangstider. Primary key impliserer også at verdien ikke kan være NULL og vi trenger dermed å ikke spesifisere dette.
+
+
+
+a) C, F, G
+
+	Aldri på høyre side: C, F
+	Bare på høyre side: G
+
+	X = {C, B, F}
+	X+ = {B, C, F, D, E, A, G}
+
+	X = {C, A, F}
+	X+ = {C, A, F, B, D, E, G}
+
+	Kandidatnøkler = {C, B, F}, {C, A, F}
+
+b) Den høyeste normalformen er 1NF. Dette fordi alle attributter representerer én verdi, men at man har nøkler som er avhengig av en delmengde av kandidatnøklene.
+		
+
+c)
+
+R(A,B,C,D,E,F,G)
+
+FDer:
+1. CDE -> B
+2. AF -> B
+3. B -> A
+4. BCF -> DE
+5. D -> G
+
+Tar for oss FDen CDE. Denne er ikke en supernøkkel og bryter med BCNF.
+CDE+ = {C, D, E, B, A}
+Dekomponerer til: S1(C, D, E, B, A) og S2(C, D, E, F, G)
+
+Tar for oss S1. Her er FDen CDE ikke en supernøkkel og bryter med BCNF.
+Her gjelder FD 1 og 3.
+Tar for oss FDen B. Denne er ikke en supernøkkel og bryter med BCNF.
+B+ = {B, A}
+Dekomponerer S1_1(C, D, E, B) og S1_2(B, A)
+Nå følger S1_1 og S1_2 BCNF og vi trenger ikke å foreta oss noe mer på disse.
+
+Tar for oss S2. Her gjelder FD 5.
+Tar for oss FDen D.
+Denne FDen bryter med BCNF.
+D+ = {D, G}
+Dekomponerer til S2_1(D, G) og S2_2(C, D, E, F)
+
+Tar for oss S2_1. Her er FDen D en supernøkkel og følger BCNF.
+
+Tar for oss S2_2. Vi har ingen FDer igjen og trenger ikke å gjøre noe mer.
+
+
+Svaret blir da
+S1_1(C, D, E, B)
+S1_2(B, A)
+S2_1(D, G)
+S2_2(C, D, E, F)

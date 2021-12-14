@@ -1,0 +1,31 @@
+# Relasjoner
+
+Person(Personnr., Navn, Adresse)
+- KN: {Personnr.}
+- PN: {Personnr.}
+Hus(Areal, Ant. Etasjer, Adresse)
+- KN: {Adresse}
+- PN: {Adresse}
+Adresse(Gate, Gatenr., Postnr.)
+- KN: {Gate, Gatenr., Postnr.}
+- PN: {Gate, Gatenr., Postnr.}
+Telefonnummer(Personnr., nummer)
+- KN: {Personnr., nummer}
+- PN: {Personnr., nummer}
+
+
+# Fremmednøkler
+
+Person(Adresse) -> Hus(Adresse)
+Hus(Adresse) -> Adresse(Gate, Gatenr., Postnr.)
+Telefonnummer(Personnr.) -> Person(Personnr.)
+
+
+# Kommentarer
+
+- Adresse blir satt opp som egen relasjon fordi det er en samling av flere attributter.
+- Person sin adresse peker til entiteten hus sin adresse. Dette fordi man en person kan bare bo i et hus. Vi lager en fremmednøkkel i enerrelasjonen når vi har en 1-til-mange relasjon.
+- Telefonnummer blir satt opp som en egen relasjon fordi det er en flerverdisattributt.
+
+
+- Har antatt at en bok inneholder flere kapitler i oppgave 2.
